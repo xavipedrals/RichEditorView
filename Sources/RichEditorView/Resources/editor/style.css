@@ -28,7 +28,7 @@ body {
     min-height: 100%;
     overflow: auto;
     font: -apple-system-body;
-    margin: 24px;
+    margin: 0 24px 24px 24px;
 }
 
 h1, p, ul, ol {
