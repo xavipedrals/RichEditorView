@@ -1,5 +1,9 @@
 # RichEditorView
 
+NOTE: This is the same as the forked repo but I added my custom CSS from sources since it was not possible to do otherwise
+
+-------
+
 This is the Swift 5 version of [cjwirth/RichEditorView](https://github.com/cjwirth/RichEditorView) using WKWebView that **added several** awesome functionalities.
 
 Table of Contents:

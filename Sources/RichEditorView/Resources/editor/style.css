@@ -28,9 +28,10 @@ body {
     min-height: 100%;
     overflow: auto;
     font: -apple-system-body;
+    margin: 24px;
 }
 
-body, h1, p, ul, ol {
+h1, p, ul, ol {
     margin: 0;
 }
 
@@ -82,3 +83,7 @@ table {overflow-x: scroll;}
 th, td {max-width: 200px; min-width:50px;}
 table, td, th{border-collapse:collapse; border:1px solid #777;}
 td{padding:5px 10px; height:35px;}
+
+img {
+    max-width: 100%;
+}
