@@ -178,7 +178,7 @@ public class RichEditorWebView: WKWebView {
             "assert.js",
             "normalize.css",
             "rich_editor.html",
-            "rich_editor.css",
+            "rich_editor.js",
             "style.css"
         ]
         for fileName in fileUrlsToCheck {
