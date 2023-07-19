@@ -126,6 +126,8 @@ public class RichEditorWebView: WKWebView {
         }
     }
     
+    var loadedFilesDirectory: URL?
+    
     // MARK: Initialization
     
     public override init(frame: CGRect) {
@@ -154,13 +156,41 @@ public class RichEditorWebView: WKWebView {
         webView.scrollView.clipsToBounds = false
         addSubview(webView)
         
-        if let filePath = Bundle.module.url(forResource: "rich_editor", withExtension: "html") {
-            webView.loadFileURL(filePath, allowingReadAccessTo: filePath.deletingLastPathComponent())
+        copyHtmlFilesToTemp()
+        
+        if let d = loadedFilesDirectory {
+            let fileUrl = d.appendingPathExtension("rich_editor.html")
+            webView.loadFileURL(fileUrl, allowingReadAccessTo: d)
         }
+//        if let filePath = Bundle.module.url(forResource: "rich_editor", withExtension: "html") {
+//            webView.loadFileURL(filePath, allowingReadAccessTo: filePath.deletingLastPathComponent())
+//        }
         
         tapRecognizer.addTarget(self, action: #selector(viewWasTapped))
         tapRecognizer.delegate = self
         addGestureRecognizer(tapRecognizer)
+    }
+    
+    func copyHtmlFilesToTemp() {
+        let fm = FileManager.default
+        let temp = fm.temporaryDirectory
+        let fileUrlsToCheck = [
+            "assert.js",
+            "normalize.css",
+            "rich_editor.html",
+            "rich_editor.css",
+            "style.css"
+        ]
+        for fileName in fileUrlsToCheck {
+            let copyUrl = temp.appendingPathExtension(fileName)
+            let comp = fileName.components(separatedBy: ".")
+            guard !fm.fileExists(atPath: copyUrl.path),
+                  let originalFileUrl = Bundle.module.url(forResource: comp[0], withExtension: comp[1]) else {
+                continue
+            }
+            try? fm.copyItem(at: originalFileUrl, to: copyUrl)
+        }
+        loadedFilesDirectory = temp
     }
     
     // MARK: - Rich Text Editing
