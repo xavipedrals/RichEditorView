@@ -126,7 +126,7 @@ public class RichEditorWebView: WKWebView {
         }
     }
     
-    var loadedFilesDirectory: URL?
+    public var loadedFilesDirectory: URL?
     
     // MARK: Initialization
     
