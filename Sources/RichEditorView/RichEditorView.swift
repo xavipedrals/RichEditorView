@@ -159,7 +159,7 @@ public class RichEditorWebView: WKWebView {
         copyHtmlFilesToTemp()
         
         if let d = loadedFilesDirectory {
-            let fileUrl = d.appendingPathExtension("rich_editor.html")
+            let fileUrl = d.appendingPathComponent("rich_editor.html", isDirectory: false)
             webView.loadFileURL(fileUrl, allowingReadAccessTo: d)
         }
 //        if let filePath = Bundle.module.url(forResource: "rich_editor", withExtension: "html") {
@@ -182,7 +182,7 @@ public class RichEditorWebView: WKWebView {
             "style.css"
         ]
         for fileName in fileUrlsToCheck {
-            let copyUrl = temp.appendingPathExtension(fileName)
+            let copyUrl = temp.appendingPathComponent(fileName, isDirectory: false)
             let comp = fileName.components(separatedBy: ".")
             guard !fm.fileExists(atPath: copyUrl.path),
                   let originalFileUrl = Bundle.module.url(forResource: comp[0], withExtension: comp[1]) else {
