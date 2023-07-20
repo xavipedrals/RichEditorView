@@ -202,9 +202,10 @@ RE.setHeading = function(heading) {
 
 RE.removeHeading = function() {
     var sel = document.getSelection().getRangeAt(0).startContainer.parentNode;
-    if (sel.tagName === `H1` || sel.tagName === `H2` || sel.tagName === `H3` || sel.tagName === `H4` || sel.tagName === `H5` || sel.tagName === `H6`) {
-        document.execCommand('formatBlock', false, '<p>');
-    }
+    document.execCommand('formatBlock', false, '<p>');
+//    if (sel.tagName === `H1` || sel.tagName === `H2` || sel.tagName === `H3` || sel.tagName === `H4` || sel.tagName === `H5` || sel.tagName === `H6`) {
+//        document.execCommand('formatBlock', false, '<p>');
+//    }
 };
 
 RE.setIndent = function() {
