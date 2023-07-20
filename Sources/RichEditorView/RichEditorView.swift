@@ -343,6 +343,10 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.removeHeading()")
     }
     
+    public func trySida() {
+        runJS("RE.trySida()")
+    }
+    
     public func indent() {
         runJS("RE.setIndent()")
     }

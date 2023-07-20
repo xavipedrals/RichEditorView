@@ -200,6 +200,10 @@ RE.setHeading = function(heading) {
     document.execCommand('formatBlock', false, sel.tagName === `H${heading}` ? '<p>' : `<h${heading}>`);
 };
 
+RE.trySida = function() {
+    console.log("SIDAAAAAAA");
+};
+
 RE.removeHeading = function() {
     var sel = document.getSelection().getRangeAt(0).startContainer.parentNode;
     document.execCommand('formatBlock', false, '<p>');
