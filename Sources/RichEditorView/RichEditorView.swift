@@ -171,7 +171,6 @@ public class RichEditorWebView: WKWebView {
         let fm = FileManager.default
         let temp = fm.temporaryDirectory
         let fileUrlsToCheck = [
-            "assert.js",
             "normalize.css",
             "rich_editor.html",
             "rich_editor.js",
@@ -341,14 +340,6 @@ public class RichEditorWebView: WKWebView {
     
     public func removeHeader() {
         runJS("RE.removeHeading()")
-    }
-    
-    public func trySida() {
-        runJS("RE.trySida()")
-    }
-    
-    public func puta() {
-        runJS("RE.puta()")
     }
     
     public func indent() {
