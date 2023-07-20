@@ -347,6 +347,10 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.trySida()")
     }
     
+    public func puta() {
+        runJS("RE.puta()")
+    }
+    
     public func indent() {
         runJS("RE.setIndent()")
     }
