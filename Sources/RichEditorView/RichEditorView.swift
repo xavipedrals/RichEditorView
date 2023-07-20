@@ -162,10 +162,6 @@ public class RichEditorWebView: WKWebView {
             let fileUrl = d.appendingPathComponent("rich_editor.html", isDirectory: false)
             webView.loadFileURL(fileUrl, allowingReadAccessTo: d)
         }
-//        if let filePath = Bundle.module.url(forResource: "rich_editor", withExtension: "html") {
-//            webView.loadFileURL(filePath, allowingReadAccessTo: filePath.deletingLastPathComponent())
-//        }
-        
         tapRecognizer.addTarget(self, action: #selector(viewWasTapped))
         tapRecognizer.delegate = self
         addGestureRecognizer(tapRecognizer)
