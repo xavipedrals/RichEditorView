@@ -212,6 +212,10 @@ RE.removeHeading = function() {
 //    }
 };
 
+RE.puta = function() {
+    console.log("Sidaaaa");
+};
+
 RE.setIndent = function() {
     document.execCommand('indent', false, null);
 };
