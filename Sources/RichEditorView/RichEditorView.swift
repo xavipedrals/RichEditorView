@@ -37,7 +37,7 @@ import WebKit
 }
 
 /// The value we hold in order to be able to set the line height before the JS completely loads.
-private let DefaultInnerLineHeight: Int = 28
+//private let DefaultInnerLineHeight: Int = 28
 
 public class RichEditorWebView: WKWebView {
     public var accessoryView: UIView?
@@ -92,11 +92,11 @@ public class RichEditorWebView: WKWebView {
     }
     
     /// The line height of the editor. Defaults to 28.
-    open private(set) var lineHeight: Int = DefaultInnerLineHeight {
-        didSet {
-            runJS("RE.setLineHeight('\(lineHeight)px')")
-        }
-    }
+//    open private(set) var lineHeight: Int = DefaultInnerLineHeight {
+//        didSet {
+//            runJS("RE.setLineHeight('\(lineHeight)px')")
+//        }
+//    }
     
     /// Whether or not the editor has finished loading or not yet.
     private var isEditorLoaded = false
@@ -197,19 +197,19 @@ public class RichEditorWebView: WKWebView {
         isContentEditable(handler: handler)
     }
     
-    private func getLineHeight(handler: @escaping (Int) -> Void) {
-        if isEditorLoaded {
-            runJS("RE.getLineHeight()") { r in
-                if let r = Int(r) {
-                    handler(r)
-                } else {
-                    handler(DefaultInnerLineHeight)
-                }
-            }
-        } else {
-            handler(DefaultInnerLineHeight)
-        }
-    }
+//    private func getLineHeight(handler: @escaping (Int) -> Void) {
+//        if isEditorLoaded {
+//            runJS("RE.getLineHeight()") { r in
+//                if let r = Int(r) {
+//                    handler(r)
+//                } else {
+//                    handler(DefaultInnerLineHeight)
+//                }
+//            }
+//        } else {
+//            handler(DefaultInnerLineHeight)
+//        }
+//    }
     
     private func setHTML(_ value: String) {
         if isEditorLoaded {
@@ -620,7 +620,7 @@ public class RichEditorWebView: WKWebView {
                 contentHTML = html
                 contentEditable = editingEnabledVar
                 placeholder = placeholderText
-                lineHeight = DefaultInnerLineHeight
+//                lineHeight = DefaultInnerLineHeight
                 delegate?.richEditorDidLoad?(self)
             }
             updateHeight()
