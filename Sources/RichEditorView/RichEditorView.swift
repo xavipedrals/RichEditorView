@@ -571,41 +571,43 @@ public class RichEditorWebView: WKWebView {
         }
     }
     
+    
+    //NOTE XAVI: This shit messes up line height for all the document and headings look like shit, commented out
     /// Scrolls the editor to a position where the caret is visible.
     /// Called repeatedly to make sure the caret is always visible when inputting text.
     /// Works only if the `lineHeight` of the editor is available.
-    private func scrollCaretToVisible() {
-        let scrollView = self.webView.scrollView
-        
-        getClientHeight(handler: { clientHeight in
-            let contentHeight = clientHeight > 0 ? CGFloat(clientHeight) : scrollView.frame.height
-            scrollView.contentSize = CGSize(width: scrollView.frame.width, height: contentHeight)
-            
-            // XXX: Maybe find a better way to get the cursor height
-            self.getLineHeight(handler: { lh in
-                let lineHeight = CGFloat(lh)
-                let cursorHeight = lineHeight - 4
-                self.relativeCaretYPosition(handler: { r in
-                    let visiblePosition = CGFloat(r)
-                    var offset: CGPoint?
-                    
-                    if visiblePosition + cursorHeight > scrollView.bounds.size.height {
-                        // Visible caret position goes further than our bounds
-                        offset = CGPoint(x: 0, y: (visiblePosition + lineHeight) - scrollView.bounds.height + scrollView.contentOffset.y)
-                    } else if visiblePosition < 0 {
-                        // Visible caret position is above what is currently visible
-                        var amount = scrollView.contentOffset.y + visiblePosition
-                        amount = amount < 0 ? 0 : amount
-                        offset = CGPoint(x: scrollView.contentOffset.x, y: amount)
-                    }
-                    
-                    if let offset = offset {
-                        scrollView.setContentOffset(offset, animated: true)
-                    }
-                })
-            })
-        })
-    }
+//    private func scrollCaretToVisible() {
+//        let scrollView = self.webView.scrollView
+//
+//        getClientHeight(handler: { clientHeight in
+//            let contentHeight = clientHeight > 0 ? CGFloat(clientHeight) : scrollView.frame.height
+//            scrollView.contentSize = CGSize(width: scrollView.frame.width, height: contentHeight)
+//
+//            // XXX: Maybe find a better way to get the cursor height
+//            self.getLineHeight(handler: { lh in
+//                let lineHeight = CGFloat(lh)
+//                let cursorHeight = lineHeight - 4
+//                self.relativeCaretYPosition(handler: { r in
+//                    let visiblePosition = CGFloat(r)
+//                    var offset: CGPoint?
+//
+//                    if visiblePosition + cursorHeight > scrollView.bounds.size.height {
+//                        // Visible caret position goes further than our bounds
+//                        offset = CGPoint(x: 0, y: (visiblePosition + lineHeight) - scrollView.bounds.height + scrollView.contentOffset.y)
+//                    } else if visiblePosition < 0 {
+//                        // Visible caret position is above what is currently visible
+//                        var amount = scrollView.contentOffset.y + visiblePosition
+//                        amount = amount < 0 ? 0 : amount
+//                        offset = CGPoint(x: scrollView.contentOffset.x, y: amount)
+//                    }
+//
+//                    if let offset = offset {
+//                        scrollView.setContentOffset(offset, animated: true)
+//                    }
+//                })
+//            })
+//        })
+//    }
     
     /// Called when actions are received from JavaScript
     /// - parameter method: String with the name of the method and optional parameters that were passed in
@@ -624,7 +626,7 @@ public class RichEditorWebView: WKWebView {
             updateHeight()
         }
         else if method.hasPrefix("input") {
-            scrollCaretToVisible()
+//            scrollCaretToVisible()
             runJS("RE.getHtml()") { content in
                 self.contentHTML = content
                 self.updateHeight()
