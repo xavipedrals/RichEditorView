@@ -154,6 +154,9 @@ public class RichEditorWebView: WKWebView {
         webView.scrollView.bounces = false
         webView.scrollView.delegate = self
         webView.scrollView.clipsToBounds = false
+        if #available(iOS 16.4, *) {
+            webView.isInspectable = true
+        }
         addSubview(webView)
         
         copyHtmlFilesToTemp()
