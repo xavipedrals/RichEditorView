@@ -339,6 +339,10 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.setHeading('\(h)')")
     }
     
+    public func removeHeader() {
+        runJS("RE.removeHeading()")
+    }
+    
     public func indent() {
         runJS("RE.setIndent()")
     }
