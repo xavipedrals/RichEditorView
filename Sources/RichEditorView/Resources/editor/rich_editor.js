@@ -431,6 +431,7 @@ RE.deleteColumnFromTable = function() {
 /**
 Recursively search element ancestors to find a element nodeName e.g. A
 **/
+//Probably can be deleted, it was used to find 'a href' but it didn't work properly
 var _findNodeByNameInContainer = function(element, nodeName, rootElementId) {
     if (element.nodeName == nodeName) {
         return element;
@@ -467,24 +468,34 @@ RE.countAnchorTagsInNode = function(node) {
  * @returns {string}
  */
 RE.getSelectedHref = function() {
-    var href, sel;
-    href = '';
-    sel = window.getSelection();
-    if (!RE.rangeOrCaretSelectionExists()) {
+    var href = '';
+    var range = window.getSelection();
+    if (!rangeOrCaretSelectionExists()) {
         return null;
     }
-
-    var tags = RE.getAnchorTagsInNode(sel.anchorNode);
-    //if more than one link is there, return null
-    if (tags.length > 1) {
-        return null;
-    } else if (tags.length == 1) {
-        href = tags[0];
-    } else {
-        var node = _findNodeByNameInContainer(sel.anchorNode.parentElement, 'A', 'editor');
-        href = node.href;
+    
+    if (range) {
+        if (range.getRangeAt) {
+            range = range.getRangeAt(0);
+        } else if (range.setStart) { // Safari 1.3
+            // Create range by itself
+            range.setStart(range.anchorNode, range.anchorOffset);
+            range.setEnd(range.focusNode, range.focusOffset);
+        }
+        
+        var html = null, link = null;
+        if (range.cloneContents) {
+            var dummy = document.createElement('div');
+            dummy.appendChild(range.cloneContents());
+            html = dummy.innerHTML;
+        }
+        
+        if (html) {
+            link = html.match(/<a.*?href\s*?=['"](.*?)['"]/);
+            return link ? link[1] : null;
+        }
     }
-    return href ? href : null;
+    return null;
 };
 
 // Returns the cursor position relative to its current position onscreen.
