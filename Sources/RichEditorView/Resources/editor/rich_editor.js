@@ -305,12 +305,17 @@ RE.insertLink = function(url, text, title) {
 };
 
 RE.prepareInsert = function() {
+    // Ensure there is a caret/selection. If none, focus the editor at the end.
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) {
+        RE.focus();
+    }
     RE.backuprange();
 };
 
 RE.backuprange = function() {
     var selection = window.getSelection();
-    if (selection.rangeCount > 0) {
+    if (selection && selection.rangeCount > 0) {
         var range = selection.getRangeAt(0);
         RE.currentSelection = {
             "startContainer": range.startContainer,
@@ -318,6 +323,9 @@ RE.backuprange = function() {
             "endContainer": range.endContainer,
             "endOffset": range.endOffset
         };
+    } else {
+        // No selection yet; clear saved selection
+        RE.currentSelection = null;
     }
 };
 
@@ -338,6 +346,13 @@ RE.selectElementContents = function(el) {
 };
 
 RE.restorerange = function() {
+    // If we don't have a saved range, create one by focusing the editor
+    if (!RE.currentSelection ||
+        !RE.currentSelection.startContainer ||
+        !RE.currentSelection.endContainer) {
+        RE.focus();
+        RE.backuprange();
+    }
     var selection = window.getSelection();
     selection.removeAllRanges();
     var range = document.createRange();
@@ -529,5 +544,7 @@ RE.getRelativeCaretYPosition = function() {
 };
 
 window.onload = function() {
+    RE.focus();
+    RE.backuprange();
     RE.callback("ready");
 };
