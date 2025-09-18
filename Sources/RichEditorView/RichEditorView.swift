@@ -426,6 +426,11 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.setCheckbox('\(UUID().uuidString.prefix(8))')")
     }
     
+    public func insertText(_ text: String) {
+        runJS("RE.prepareInsert()")
+        runJS("RE.insertText('\(text.escaped)')")
+    }
+    
     // MARK: Table functionalities
     public func insertTable(width: Int = 2, height: Int = 2) {
         runJS("RE.prepareInsert()")

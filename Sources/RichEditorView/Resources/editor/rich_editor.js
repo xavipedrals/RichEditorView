@@ -368,6 +368,12 @@ RE.blurFocus = function() {
     RE.editor.blur();
 };
 
+RE.insertText = function(text) {
+    RE.restorerange();
+    document.execCommand('insertText', false, text);
+    RE.callback("input");
+};
+
 // User editing table functionality
 RE.insertTable = function(width, height) {
     var table = document.createElement("table");
