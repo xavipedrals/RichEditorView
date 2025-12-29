@@ -388,6 +388,11 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.prepareInsert()")
         runJS("RE.insertImage('\(url.escaped)', '\(alt.escaped)')")
     }
+    
+    public func insertAudio(_ url: String) {
+        runJS("RE.prepareInsert()")
+        runJS("RE.insertImage('\(url.escaped)')")
+    }
 
     public func insertVideo(vidURL: String, posterURL: String="", isBase64: Bool=false) {
             // Remember, both poster and src can be base64 encoded

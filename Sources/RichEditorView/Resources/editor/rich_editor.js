@@ -277,6 +277,22 @@ RE.insertImage = function(url, alt) {
     RE.callback("input");
 };
 
+RE.insertAudio = function(url) {
+    var audioWrapper = document.createElement('div');
+    audioWrapper.setAttribute('contenteditable', 'false');
+    audioWrapper.className = 're-audio-wrapper';
+
+    var audio = document.createElement('audio');
+    audio.setAttribute('controls', 'controls');
+    audio.setAttribute('playsinline', '');
+    audio.setAttribute('src', url);
+
+    audioWrapper.appendChild(audio);
+
+    RE.insertHTML(audioWrapper.outerHTML);
+    RE.callback("input");
+};
+
 RE.setBlockquote = function() {
     document.execCommand('formatBlock', false, '<blockquote>');
 };
