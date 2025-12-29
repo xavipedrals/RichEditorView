@@ -391,7 +391,7 @@ public class RichEditorWebView: WKWebView {
     
     public func insertAudio(_ url: String) {
         runJS("RE.prepareInsert()")
-        runJS("RE.insertImage('\(url.escaped)')")
+        runJS("RE.insertAudio('\(url.escaped)')")
     }
 
     public func insertVideo(vidURL: String, posterURL: String="", isBase64: Bool=false) {
