@@ -293,6 +293,26 @@ RE.insertAudio = function(url) {
     RE.callback("input");
 };
 
+RE.insertAudio2 = function(url) {
+    RE.restorerange();
+    var audio = document.createElement('audio');
+    audio.controls = true;
+    audio.playsInline = true;
+    audio.src = url;
+
+    var wrapper = document.createElement('div');
+    wrapper.contentEditable = false;
+    wrapper.appendChild(audio);
+    wrapper.appendChild(document.createElement('br')); // for spacing
+
+    var sel = window.getSelection();
+    var range = sel.getRangeAt(0);
+    range.insertNode(wrapper);
+    range.collapse(false); // move cursor after
+
+    RE.callback("input");
+};
+
 RE.setBlockquote = function() {
     document.execCommand('formatBlock', false, '<blockquote>');
 };

@@ -131,15 +131,60 @@ public class RichEditorWebView: WKWebView {
     // MARK: Initialization
     
     public override init(frame: CGRect) {
-        webView = RichEditorWebView()
+//        webView = RichEditorWebView()
+        let config = Self.makeConfiguration()
+        webView = RichEditorWebView(frame: .zero, configuration: config)
         super.init(frame: frame)
+        attachScriptHandlers()
         setup()
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        webView = RichEditorWebView()
+        let config = Self.makeConfiguration()
+        webView = RichEditorWebView(frame: .zero, configuration: config)
         super.init(coder: aDecoder)
+        attachScriptHandlers()
         setup()
+//        webView = RichEditorWebView(frame: .zero, configuration: config)
+//        super.init(coder: aDecoder)
+//        setup()
+    }
+    
+    private static func makeConfiguration() -> WKWebViewConfiguration {
+        let config = WKWebViewConfiguration()
+        let userContentController = WKUserContentController()
+
+        let logScriptSource = """
+            console.log = function(message) {
+                window.webkit.messageHandlers.consoleLog.postMessage(message);
+            };
+            console.error = function(message) {
+                window.webkit.messageHandlers.consoleError.postMessage(message);
+            };
+            window.onerror = function(msg, url, line, col, error) {
+                window.webkit.messageHandlers.jsError.postMessage(
+                    msg + ' at ' + url + ':' + line
+                );
+            };
+        """
+
+        let logScript = WKUserScript(
+            source: logScriptSource,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: false
+        )
+
+        userContentController.addUserScript(logScript)
+        config.userContentController = userContentController
+
+        return config
+    }
+    
+    private func attachScriptHandlers() {
+        let ucc = webView.configuration.userContentController
+        ucc.add(self, name: "consoleLog")
+        ucc.add(self, name: "consoleError")
+        ucc.add(self, name: "jsError")
     }
     
     private func setup() {
@@ -392,6 +437,11 @@ public class RichEditorWebView: WKWebView {
     public func insertAudio(_ url: String) {
         runJS("RE.prepareInsert()")
         runJS("RE.insertAudio('\(url.escaped)')")
+    }
+    
+    public func insertAudio2(_ url: String) {
+        runJS("RE.prepareInsert()")
+        runJS("RE.insertAudio2('\(url.escaped)')")
     }
 
     public func insertVideo(vidURL: String, posterURL: String="", isBase64: Bool=false) {
@@ -692,5 +742,13 @@ public class RichEditorWebView: WKWebView {
     open override func resignFirstResponder() -> Bool {
         blur()
         return true
+    }
+}
+
+extension RichEditorView: WKScriptMessageHandler {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "consoleLog" || message.name == "consoleError" || message.name == "jsError" {
+            print("JS Log: \(message.body)")
+        }
     }
 }
