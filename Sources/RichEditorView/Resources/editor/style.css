@@ -91,33 +91,72 @@ img {
     max-width: 100%;
 }
 
-.anki-audio {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: #f2f2f2;
-    font-size: 13px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s ease;
+.play-button {
+  width: var(--size);
+  height: var(--size);
+  background: var(--blue);
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+
+  /* iOS-like feel */
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.anki-audio:hover {
-    background: #e6e6e6;
+/* Press effect */
+.play-button:active {
+  transform: scale(0.92);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 
-.anki-audio[data-state="playing"] {
-    background: #dbeafe;
+/* ---------------- ICONS ---------------- */
+
+.icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
-.anki-audio[data-state="playing"] .icon {
-    animation: audioPulse 1.1s infinite ease-in-out;
+/* ▶ PLAY (CSS triangle) */
+.icon.play {
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 20px solid white;
+  transform: translateX(2px);
 }
 
-@keyframes audioPulse {
-    0%   { transform: scale(1); opacity: 1; }
-    50%  { transform: scale(1.15); opacity: 0.7; }
-    100% { transform: scale(1); opacity: 1; }
+/* ⏸ PAUSE */
+.icon.pause {
+  width: 20px;
+  height: 24px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+}
+
+.icon.pause::before,
+.icon.pause::after {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 100%;
+  background: white;
+  border-radius: 2px;
+}
+
+/* ---------------- STATES ---------------- */
+
+.play-button.is-playing .icon.play {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.play-button.is-playing .icon.pause {
+  opacity: 1;
+  transform: scale(1);
 }

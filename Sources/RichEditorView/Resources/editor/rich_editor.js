@@ -294,26 +294,44 @@ RE.insertImage = function(url, alt) {
 //    RE.callback("input");
 //};
 
+//RE.insertAudioMarker = function (audioId) {
+//    var span = document.createElement('span');
+//    span.className = 'anki-audio';
+//    span.setAttribute('data-audio-id', audioId);
+//    span.setAttribute('data-state', 'paused');
+//    span.setAttribute('contenteditable', 'false');
+//
+//    span.innerHTML = `
+//        <span class="anki-audio-btn">
+//            <span class="icon"></span>
+//        </span>
+//    `;
+//
+//    span.onclick = function (e) {
+//        e.preventDefault();
+//        window.webkit.messageHandlers.audioTapped.postMessage(audioId);
+//    };
+//
+//    RE.insertHTML(span.outerHTML);
+//    setTimeout(() => RE.callback('input'), 0);
+//};
+
 RE.insertAudioMarker = function (audioId) {
-    var span = document.createElement('span');
-    span.className = 'anki-audio';
-    span.setAttribute('data-audio-id', audioId);
-    span.setAttribute('data-state', 'paused');
-    span.setAttribute('contenteditable', 'false');
+    // Ensure a valid caret exists
+    RE.prepareInsert();
+    console.log("SIDAAAAA");
 
-    span.innerHTML = `
-        <span class="anki-audio-btn">
-            <span class="icon"></span>
-        </span>
-    `;
+    var html =
+        '<div class="play-button" id="btn" contenteditable="false">' +
+            '<span class="icon play"></span>' +
+             '<span class="icon pause"></span>' +
+            '</div>' +
 
-    span.onclick = function (e) {
-        e.preventDefault();
-        window.webkit.messageHandlers.audioTapped.postMessage(audioId);
-    };
+        // Caret host so typing can continue
+        '<p><br></p>';
 
-    RE.insertHTML(span.outerHTML);
-    setTimeout(() => RE.callback('input'), 0);
+    RE.insertHTML(html);
+    RE.callback('input');
 };
 
 RE.setAudioState = function (audioId, isPlaying) {
