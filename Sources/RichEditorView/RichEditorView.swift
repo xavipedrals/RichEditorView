@@ -219,26 +219,55 @@ public class RichEditorWebView: WKWebView {
         addGestureRecognizer(tapRecognizer)
     }
     
+    //Rewrite everytime to ensure that changes in the JS are inmedietly applied to the users app, otherwise old JS migh be the one actually being used and I might go bald
     func copyHtmlFilesToTemp() {
         let fm = FileManager.default
         let temp = fm.temporaryDirectory
-        let fileUrlsToCheck = [
+        let fileUrlsToCopy = [
             "normalize.css",
             "rich_editor.html",
             "rich_editor.js",
             "style.css"
         ]
-        for fileName in fileUrlsToCheck {
+
+        for fileName in fileUrlsToCopy {
             let copyUrl = temp.appendingPathComponent(fileName, isDirectory: false)
-            let comp = fileName.components(separatedBy: ".")
-            guard !fm.fileExists(atPath: copyUrl.path),
-                  let originalFileUrl = Bundle.module.url(forResource: comp[0], withExtension: comp[1]) else {
+            let comp = fileName.split(separator: ".", maxSplits: 1).map(String.init)
+
+            guard let originalFileUrl = Bundle.module.url(forResource: comp[0], withExtension: comp[1]) else {
                 continue
+            }
+
+            // ✅ overwrite every time
+            if fm.fileExists(atPath: copyUrl.path) {
+                try? fm.removeItem(at: copyUrl)
             }
             try? fm.copyItem(at: originalFileUrl, to: copyUrl)
         }
+
         loadedFilesDirectory = temp
     }
+    
+//    func copyHtmlFilesToTemp() {
+//        let fm = FileManager.default
+//        let temp = fm.temporaryDirectory
+//        let fileUrlsToCheck = [
+//            "normalize.css",
+//            "rich_editor.html",
+//            "rich_editor.js",
+//            "style.css"
+//        ]
+//        for fileName in fileUrlsToCheck {
+//            let copyUrl = temp.appendingPathComponent(fileName, isDirectory: false)
+//            let comp = fileName.components(separatedBy: ".")
+//            guard !fm.fileExists(atPath: copyUrl.path),
+//                  let originalFileUrl = Bundle.module.url(forResource: comp[0], withExtension: comp[1]) else {
+//                continue
+//            }
+//            try? fm.copyItem(at: originalFileUrl, to: copyUrl)
+//        }
+//        loadedFilesDirectory = temp
+//    }
     
     // MARK: - Rich Text Editing
     
