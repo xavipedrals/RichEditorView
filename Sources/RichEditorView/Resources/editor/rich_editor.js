@@ -277,40 +277,52 @@ RE.insertImage = function(url, alt) {
     RE.callback("input");
 };
 
-RE.insertAudio = function(url) {
-    var audioWrapper = document.createElement('div');
-    audioWrapper.setAttribute('contenteditable', 'false');
-    audioWrapper.className = 're-audio-wrapper';
+//NOTE: WKWebview doesn't allow dinamic insert of audio html tags for security reasons, don't retry this in the future
+//RE.insertAudio = function(url) {
+//    var audioWrapper = document.createElement('div');
+//    audioWrapper.setAttribute('contenteditable', 'false');
+//    audioWrapper.className = 're-audio-wrapper';
+//
+//    var audio = document.createElement('audio');
+//    audio.setAttribute('controls', 'controls');
+//    audio.setAttribute('playsinline', '');
+//    audio.setAttribute('src', url);
+//
+//    audioWrapper.appendChild(audio);
+//
+//    RE.insertHTML(audioWrapper.outerHTML);
+//    RE.callback("input");
+//};
 
-    var audio = document.createElement('audio');
-    audio.setAttribute('controls', 'controls');
-    audio.setAttribute('playsinline', '');
-    audio.setAttribute('src', url);
+RE.insertAudioMarker = function (audioId) {
+    var span = document.createElement('span');
+    span.className = 'anki-audio';
+    span.setAttribute('data-audio-id', audioId);
+    span.setAttribute('data-state', 'paused');
+    span.setAttribute('contenteditable', 'false');
 
-    audioWrapper.appendChild(audio);
+    span.innerHTML = `
+        <span class="anki-audio-btn">
+            <span class="icon"></span>
+        </span>
+    `;
 
-    RE.insertHTML(audioWrapper.outerHTML);
-    RE.callback("input");
+    span.onclick = function (e) {
+        e.preventDefault();
+        window.webkit.messageHandlers.audioTapped.postMessage(audioId);
+    };
+
+    RE.insertHTML(span.outerHTML);
+    setTimeout(() => RE.callback('input'), 0);
 };
 
-RE.insertAudio2 = function(url) {
-    RE.restorerange();
-    var audio = document.createElement('audio');
-    audio.controls = true;
-    audio.playsInline = true;
-    audio.src = url;
+RE.setAudioState = function (audioId, isPlaying) {
+    var el = document.querySelector(
+        `.anki-audio[data-audio-id="${audioId}"]`
+    );
+    if (!el) return;
 
-    var wrapper = document.createElement('div');
-    wrapper.contentEditable = false;
-    wrapper.appendChild(audio);
-    wrapper.appendChild(document.createElement('br')); // for spacing
-
-    var sel = window.getSelection();
-    var range = sel.getRangeAt(0);
-    range.insertNode(wrapper);
-    range.collapse(false); // move cursor after
-
-    RE.callback("input");
+    el.setAttribute('data-state', isPlaying ? 'playing' : 'paused');
 };
 
 RE.setBlockquote = function() {

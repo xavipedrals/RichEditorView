@@ -34,6 +34,9 @@ import WebKit
     /// Called when custom actions are called by callbacks in the JS
     /// By default, this method is not used unless called by some custom JS that you add
     @objc optional func richEditor(_ editor: RichEditorView, handle action: String)
+    
+    //Custom made by me
+    @objc optional func richEditorDidTapAudio(id: String)
 }
 
 /// The value we hold in order to be able to set the line height before the JS completely loads.
@@ -182,6 +185,7 @@ public class RichEditorWebView: WKWebView {
     
     private func attachScriptHandlers() {
         let ucc = webView.configuration.userContentController
+        ucc.add(self, name: "audioTapped")
         ucc.add(self, name: "consoleLog")
         ucc.add(self, name: "consoleError")
         ucc.add(self, name: "jsError")
@@ -434,14 +438,16 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.insertImage('\(url.escaped)', '\(alt.escaped)')")
     }
     
-    public func insertAudio(_ url: String) {
+    public func insertAudio(_ audioId: String) {
         runJS("RE.prepareInsert()")
-        runJS("RE.insertAudio('\(url.escaped)')")
+        runJS("RE.insertAudioMarker('\(audioId)')")
     }
     
-    public func insertAudio2(_ url: String) {
-        runJS("RE.prepareInsert()")
-        runJS("RE.insertAudio2('\(url.escaped)')")
+    /// Updates the visual state of an audio marker (play / pause)
+    public func setAudioState(audioId: String, isPlaying: Bool) {
+        runJS("""
+            RE.setAudioState('\(audioId)', \(isPlaying ? "true" : "false"));
+        """)
     }
 
     public func insertVideo(vidURL: String, posterURL: String="", isBase64: Bool=false) {
@@ -749,6 +755,9 @@ extension RichEditorView: WKScriptMessageHandler {
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "consoleLog" || message.name == "consoleError" || message.name == "jsError" {
             print("JS Log: \(message.body)")
+        } else if message.name == "audioTapped",
+                  let audioId = message.body as? String {
+            delegate?.richEditorDidTapAudio?(id: audioId)
         }
     }
 }
