@@ -478,8 +478,20 @@ public class RichEditorWebView: WKWebView {
     }
     
     public func insertAudio3(audioId: String, playImage: String, pauseImage: String) {
-        runJS("RE.prepareInsert()")
-        runJS("RE.insertAudioMarker3('\(audioId)', '\(playImage)', '\(pauseImage)')")
+//        runJS("RE.prepareInsert()")
+//        runJS("RE.insertAudioMarker3('\(audioId)', '\(playImage)', '\(pauseImage)')")
+        let js = """
+            (function(){
+                if (!window.RE || typeof RE.insertAudioMarker3 !== 'function') {
+                    console.error('RE.insertAudioMarker3 is missing');
+                    return;
+                }
+                RE.focus();
+                RE.prepareInsert();
+                RE.insertAudioMarker3('\(audioId.escaped)', '\(playImage.escaped)', '\(pauseImage.escaped)');
+            })();
+            """
+        runJS(js)
     }
     
     /// Updates the visual state of an audio marker (play / pause)
