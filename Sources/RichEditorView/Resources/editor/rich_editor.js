@@ -390,6 +390,42 @@ RE.insertAudioMarker3 = function (audioId, playImg, pauseImg) {
     RE.callback('input');
 };
 
+//RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
+//    RE.prepareInsert();
+//    
+//    var img = document.createElement('img');
+//    img.src = playImg;
+//    img.className = 'anki-audio-img';
+//    img.setAttribute('data-audio-id', audioId);
+//    img.setAttribute('data-play-src', playImg);
+//    img.setAttribute('data-pause-src', pauseImg);
+//    img.setAttribute('data-state', 'paused');
+//    img.setAttribute('alt', 'Play audio');
+//    
+//    // Prevent text interaction
+//    img.setAttribute('draggable', 'false');
+//    img.style.userSelect = 'none';
+//    img.style.webkitUserSelect = 'none';
+//    
+//    img.addEventListener('mousedown', e => e.preventDefault());
+//    img.addEventListener('touchstart', e => e.preventDefault());
+//    
+//    // 👇 ATOMIC INLINE WRAPPER
+//    var html =
+//    '<span class="anki-audio-inline" contenteditable="false">' +
+//    img.outerHTML +
+//    '</span>' +
+//    '<p><br></p>'; // caret host
+//    
+//    RE.insertHTML(html);
+//    
+//    setTimeout(function () {
+//            RE.lockAudioMarkers();
+//        }, 0);
+//    
+//    RE.callback('input');
+//};
+
 RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     RE.prepareInsert();
     
@@ -415,7 +451,7 @@ RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     '<span class="anki-audio-inline" contenteditable="false">' +
     img.outerHTML +
     '</span>' +
-    '<p><br></p>'; // caret host
+    '<span class="caret-anchor">\u200B</span>';
     
     RE.insertHTML(html);
     
