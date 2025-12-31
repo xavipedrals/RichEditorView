@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- "use strict";
+"use strict";
 
 var RE = {};
 
@@ -79,7 +79,7 @@ RE.runCallbackQueue = function() {
     if (RE.callbackQueue.length === 0) {
         return;
     }
-
+    
     setTimeout(function() {
         window.location.href = "re-callback://";
     }, 0);
@@ -100,11 +100,11 @@ RE.setHtml = function(contents) {
     var tempWrapper = document.createElement('div');
     tempWrapper.innerHTML = contents;
     var images = tempWrapper.querySelectorAll("img");
-
+    
     for (var i = 0; i < images.length; i++) {
         images[i].onload = RE.updateHeight;
     }
-
+    
     RE.editor.innerHTML = tempWrapper.innerHTML;
     RE.updatePlaceholder();
 };
@@ -272,7 +272,7 @@ RE.insertImage = function(url, alt) {
     img.setAttribute("src", url);
     img.setAttribute("alt", alt);
     img.onload = RE.updateHeight;
-
+    
     RE.insertHTML(img.outerHTML);
     RE.callback("input");
 };
@@ -320,37 +320,37 @@ RE.insertAudioMarker = function (audioId) {
     // Ensure a valid caret exists
     RE.prepareInsert();
     console.log("SIDAAAAA");
-
+    
     var html =
-        '<div class="play-button" contenteditable="false">' +
-            '<span class="icon play"></span>' +
-             '<span class="icon pause"></span>' +
-            '</div>' +
-
-        // Caret host so typing can continue
-        '<p><br></p>';
-
+    '<div class="play-button" contenteditable="false">' +
+    '<span class="icon play"></span>' +
+    '<span class="icon pause"></span>' +
+    '</div>' +
+    
+    // Caret host so typing can continue
+    '<p><br></p>';
+    
     RE.insertHTML(html);
     RE.callback('input');
 };
 
 RE.insertAudioMarker2 = function (audioId, playImg, pauseImg) {
     RE.prepareInsert();
-
+    
     var html =
-        '<div class="anki-audio-wrapper" contenteditable="false">' +
-            '<img ' +
-                'src="' + playImg + '" ' +
-                'class="anki-audio-img" ' +
-                'data-audio-id="' + audioId + '" ' +
-                'data-play-src="' + playImg + '" ' +
-                'data-pause-src="' + pauseImg + '" ' +
-                'data-state="paused" ' +
-                'alt="Play audio"' +
-            '/>' +
-        '</div>' +
-        '<p><br></p>';
-
+    '<div class="anki-audio-wrapper" contenteditable="false">' +
+    '<img ' +
+    'src="' + playImg + '" ' +
+    'class="anki-audio-img" ' +
+    'data-audio-id="' + audioId + '" ' +
+    'data-play-src="' + playImg + '" ' +
+    'data-pause-src="' + pauseImg + '" ' +
+    'data-state="paused" ' +
+    'alt="Play audio"' +
+    '/>' +
+    '</div>' +
+    '<p><br></p>';
+    
     RE.insertHTML(html);
     RE.callback('input');
 };
@@ -358,41 +358,41 @@ RE.insertAudioMarker2 = function (audioId, playImg, pauseImg) {
 RE.insertAudioMarker3 = function (audioId, playImg, pauseImg) {
     // Make sure we have a caret
     RE.prepareInsert();
-
+    
     // Wrapper (block-level, non-editable)
     var wrapper = document.createElement('div');
     wrapper.className = 'anki-audio-wrapper';
     wrapper.setAttribute('contenteditable', 'false');
-
+    
     // Image
     var img = document.createElement('img');
     img.className = 'anki-audio-img';
     img.setAttribute('src', playImg);
     img.setAttribute('alt', 'Play audio');
-
+    
     img.setAttribute('data-audio-id', audioId);
     img.setAttribute('data-play-src', playImg);
     img.setAttribute('data-pause-src', pauseImg);
     img.setAttribute('data-state', 'paused');
-
+    
     // Height updates (same as insertImage)
     img.onload = RE.updateHeight;
-
+    
     // Assemble
     wrapper.appendChild(img);
-
+    
     // Insert into editor
     RE.insertHTML(wrapper.outerHTML);
-
+    
     // Add a caret host so typing continues normally
     RE.insertHTML('<p><br></p>');
-
+    
     RE.callback('input');
 };
 
 RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     RE.prepareInsert();
-
+    
     var img = document.createElement('img');
     img.src = playImg;
     img.className = 'anki-audio-img';
@@ -401,36 +401,36 @@ RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     img.setAttribute('data-pause-src', pauseImg);
     img.setAttribute('data-state', 'paused');
     img.setAttribute('alt', 'Play audio');
-
+    
     // Prevent text interaction
     img.setAttribute('draggable', 'false');
     img.style.userSelect = 'none';
     img.style.webkitUserSelect = 'none';
-
+    
     img.addEventListener('mousedown', e => e.preventDefault());
     img.addEventListener('touchstart', e => e.preventDefault());
-
-    // 👇 CRITICAL: wrap in INLINE span, not div
+    
+    // 👇 ATOMIC INLINE WRAPPER
     var html =
-        '<span class="anki-audio-inline">' +
-            img.outerHTML +
-        '</span>' +
-        '<p><br></p>';
-
+    '<span class="anki-audio-inline" contenteditable="false">' +
+    img.outerHTML +
+    '</span>' +
+    '<p><br></p>'; // caret host
+    
     RE.insertHTML(html);
     RE.callback('input');
 };
 
 RE.setAudioState = function (audioId, isPlaying) {
     var img = document.querySelector(
-        '.anki-audio-img[data-audio-id="' + audioId + '"]'
-    );
+                                     '.anki-audio-img[data-audio-id="' + audioId + '"]'
+                                     );
     if (!img) return;
-
+    
     img.setAttribute('data-state', isPlaying ? 'playing' : 'paused');
     img.src = isPlaying
-        ? img.getAttribute('data-pause-src')
-        : img.getAttribute('data-play-src');
+    ? img.getAttribute('data-pause-src')
+    : img.getAttribute('data-play-src');
 };
 
 RE.setBlockquote = function() {
@@ -451,7 +451,7 @@ RE.insertLink = function(url, text, title) {
         var el = document.createElement("a");
         el.setAttribute("href", url);
         el.setAttribute("title", title);
-
+        
         var range = sel.getRangeAt(0).cloneRange();
         range.surroundContents(el);
         sel.removeAllRanges();
@@ -554,7 +554,7 @@ RE.insertTable = function(width, height) {
             var cell = row.insertCell();
         }
     }
-
+    
     RE.insertHTML(table.outerHTML);
     RE.callback("input");
 };
@@ -570,7 +570,7 @@ function getNearestTableAncestor(htmlElementNode) {
 }
 
 RE.isCursorInTable = function() {
-    return document.querySelectorAll(":hover")[elements.length - 1] instanceof HTMLTableCellElement  
+    return document.querySelectorAll(":hover")[elements.length - 1] instanceof HTMLTableCellElement
 };
 
 RE.addRowToTable = function() {
@@ -606,8 +606,8 @@ RE.deleteColumnFromTable = function() {
 };
 
 /**
-Recursively search element ancestors to find a element nodeName e.g. A
-**/
+ Recursively search element ancestors to find a element nodeName e.g. A
+ **/
 //Probably can be deleted, it was used to find 'a href' but it didn't work properly
 var _findNodeByNameInContainer = function(element, nodeName, rootElementId) {
     if (element.nodeName == nodeName) {
@@ -626,7 +626,7 @@ var isAnchorNode = function(node) {
 
 RE.getAnchorTagsInNode = function(node) {
     var links = [];
-
+    
     while (node.nextSibling !== null && node.nextSibling !== undefined) {
         node = node.nextSibling;
         if (isAnchorNode(node)) {
