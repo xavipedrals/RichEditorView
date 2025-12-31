@@ -322,7 +322,7 @@ RE.insertAudioMarker = function (audioId) {
     console.log("SIDAAAAA");
 
     var html =
-        '<div class="play-button" id="btn" contenteditable="false">' +
+        '<div class="play-button" contenteditable="false">' +
             '<span class="icon play"></span>' +
              '<span class="icon pause"></span>' +
             '</div>' +

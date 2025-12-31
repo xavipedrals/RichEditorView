@@ -92,9 +92,9 @@ img {
 }
 
 .play-button {
-  width: var(--size);
-  height: var(--size);
-  background: var(--blue);
+  width: 100px;
+  height: 100px;
+  background: blue;
   border-radius: 50%;
   position: relative;
   cursor: pointer;
