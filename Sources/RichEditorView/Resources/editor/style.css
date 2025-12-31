@@ -160,3 +160,24 @@ img {
   opacity: 1;
   transform: scale(1);
 }
+
+.anki-audio-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 12px 0;
+}
+
+.anki-audio-img {
+    width: 96px;
+    height: auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+
+    transition: transform 0.12s ease-out;
+}
+
+.anki-audio-img:active {
+    transform: scale(0.92);
+}

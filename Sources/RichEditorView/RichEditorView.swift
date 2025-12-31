@@ -472,6 +472,16 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.insertAudioMarker('\(audioId)')")
     }
     
+    public func insertAudio2(audioId: String, playImage: String, pauseImage: String) {
+        runJS("RE.prepareInsert()")
+        runJS("RE.insertAudioMarker2('\(audioId)', '\(playImage)', '\(pauseImage)')")
+    }
+    
+    public func insertAudio3(audioId: String, playImage: String, pauseImage: String) {
+        runJS("RE.prepareInsert()")
+        runJS("RE.insertAudioMarker3('\(audioId)', '\(playImage)', '\(pauseImage)')")
+    }
+    
     /// Updates the visual state of an audio marker (play / pause)
     public func setAudioState(audioId: String, isPlaying: Bool) {
         runJS("""

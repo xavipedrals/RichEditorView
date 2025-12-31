@@ -334,13 +334,72 @@ RE.insertAudioMarker = function (audioId) {
     RE.callback('input');
 };
 
-RE.setAudioState = function (audioId, isPlaying) {
-    var el = document.querySelector(
-        `.anki-audio[data-audio-id="${audioId}"]`
-    );
-    if (!el) return;
+RE.insertAudioMarker2 = function (audioId, playImg, pauseImg) {
+    RE.prepareInsert();
 
-    el.setAttribute('data-state', isPlaying ? 'playing' : 'paused');
+    var html =
+        '<div class="anki-audio-wrapper" contenteditable="false">' +
+            '<img ' +
+                'src="' + playImg + '" ' +
+                'class="anki-audio-img" ' +
+                'data-audio-id="' + audioId + '" ' +
+                'data-play-src="' + playImg + '" ' +
+                'data-pause-src="' + pauseImg + '" ' +
+                'data-state="paused" ' +
+                'alt="Play audio"' +
+            '/>' +
+        '</div>' +
+        '<p><br></p>';
+
+    RE.insertHTML(html);
+    RE.callback('input');
+};
+
+RE.insertAudioMarker3 = function (audioId, playImg, pauseImg) {
+    // Make sure we have a caret
+    RE.prepareInsert();
+
+    // Wrapper (block-level, non-editable)
+    var wrapper = document.createElement('div');
+    wrapper.className = 'anki-audio-wrapper';
+    wrapper.setAttribute('contenteditable', 'false');
+
+    // Image
+    var img = document.createElement('img');
+    img.className = 'anki-audio-img';
+    img.setAttribute('src', playImg);
+    img.setAttribute('alt', 'Play audio');
+
+    img.setAttribute('data-audio-id', audioId);
+    img.setAttribute('data-play-src', playImg);
+    img.setAttribute('data-pause-src', pauseImg);
+    img.setAttribute('data-state', 'paused');
+
+    // Height updates (same as insertImage)
+    img.onload = RE.updateHeight;
+
+    // Assemble
+    wrapper.appendChild(img);
+
+    // Insert into editor
+    RE.insertHTML(wrapper.outerHTML);
+
+    // Add a caret host so typing continues normally
+    RE.insertHTML('<p><br></p>');
+
+    RE.callback('input');
+};
+
+RE.setAudioState = function (audioId, isPlaying) {
+    var img = document.querySelector(
+        '.anki-audio-img[data-audio-id="' + audioId + '"]'
+    );
+    if (!img) return;
+
+    img.setAttribute('data-state', isPlaying ? 'playing' : 'paused');
+    img.src = isPlaying
+        ? img.getAttribute('data-pause-src')
+        : img.getAttribute('data-play-src');
 };
 
 RE.setBlockquote = function() {
