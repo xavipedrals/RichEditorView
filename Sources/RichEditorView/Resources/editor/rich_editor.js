@@ -418,7 +418,32 @@ RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     '<p><br></p>'; // caret host
     
     RE.insertHTML(html);
+    
+    setTimeout(function () {
+            RE.lockAudioMarkers();
+        }, 0);
+    
     RE.callback('input');
+};
+
+RE.lockAudioMarkers = function () {
+    var nodes = document.querySelectorAll('.anki-audio-inline');
+
+    nodes.forEach(function (el) {
+        el.setAttribute('contenteditable', 'false');
+
+        // Extra hardening for Safari
+        el.style.userSelect = 'none';
+        el.style.webkitUserSelect = 'none';
+
+        el.addEventListener('beforeinput', function (e) {
+            e.preventDefault();
+        });
+
+        el.addEventListener('keydown', function (e) {
+            e.preventDefault();
+        });
+    });
 };
 
 RE.setAudioState = function (audioId, isPlaying) {
