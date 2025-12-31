@@ -390,6 +390,37 @@ RE.insertAudioMarker3 = function (audioId, playImg, pauseImg) {
     RE.callback('input');
 };
 
+RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
+    RE.prepareInsert();
+
+    var img = document.createElement('img');
+    img.src = playImg;
+    img.className = 'anki-audio-img';
+    img.setAttribute('data-audio-id', audioId);
+    img.setAttribute('data-play-src', playImg);
+    img.setAttribute('data-pause-src', pauseImg);
+    img.setAttribute('data-state', 'paused');
+    img.setAttribute('alt', 'Play audio');
+
+    // Prevent text interaction
+    img.setAttribute('draggable', 'false');
+    img.style.userSelect = 'none';
+    img.style.webkitUserSelect = 'none';
+
+    img.addEventListener('mousedown', e => e.preventDefault());
+    img.addEventListener('touchstart', e => e.preventDefault());
+
+    // 👇 CRITICAL: wrap in INLINE span, not div
+    var html =
+        '<span class="anki-audio-inline">' +
+            img.outerHTML +
+        '</span>' +
+        '<p><br></p>';
+
+    RE.insertHTML(html);
+    RE.callback('input');
+};
+
 RE.setAudioState = function (audioId, isPlaying) {
     var img = document.querySelector(
         '.anki-audio-img[data-audio-id="' + audioId + '"]'

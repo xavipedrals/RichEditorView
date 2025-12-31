@@ -168,16 +168,34 @@ img {
     padding: 12px 0;
 }
 
-.anki-audio-img {
-    width: 96px;
-    height: auto;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-drag: none;
-
-    transition: transform 0.12s ease-out;
-}
+/*.anki-audio-img {*/
+/*    width: 96px;*/
+/*    height: auto;*/
+/*    cursor: pointer;*/
+/*    user-select: none;*/
+/*    -webkit-user-drag: none;*/
+/**/
+/*    transition: transform 0.12s ease-out;*/
+/*}*/
 
 .anki-audio-img:active {
     transform: scale(0.92);
+}
+
+.anki-audio-inline {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.anki-audio-img {
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+
+    transition: transform 0.1s ease;
 }
