@@ -24,6 +24,17 @@ document.addEventListener("selectionchange", function() {
     RE.backuprange();
 });
 
+document.addEventListener("click", function (e) {
+    const span = e.target.closest(".anki-audio-inline");
+    if (!span) return;
+
+    const audioId = span.dataset.audioId || "";
+
+    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.audioTapped) {
+        window.webkit.messageHandlers.audioTapped.postMessage(audioId);
+    }
+});
+
 //looks specifically for a Range selection and not a Caret selection
 RE.rangeSelectionExists = function() {
     //!! coerces a null to bool
@@ -467,7 +478,7 @@ RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     
     // 👇 ATOMIC INLINE WRAPPER
     var html =
-    '<span class="anki-audio-inline" contenteditable="false">' +
+    '<span class="anki-audio-inline" contenteditable="false" data-audio-id="' + audioId + '">' +
     img.outerHTML +
     '</span>' +
     '<span class="caret-anchor">\u200B</span>';

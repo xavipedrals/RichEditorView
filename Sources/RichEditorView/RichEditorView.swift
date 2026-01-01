@@ -808,6 +808,7 @@ extension RichEditorView: WKScriptMessageHandler {
             print("JS Log: \(message.body)")
         } else if message.name == "audioTapped",
                   let audioId = message.body as? String {
+            print("Audio tapped with id: \(audioId)")
             delegate?.richEditorDidTapAudio?(id: audioId)
         }
     }
