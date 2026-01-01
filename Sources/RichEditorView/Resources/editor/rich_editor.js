@@ -447,6 +447,7 @@ RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     img.addEventListener('touchstart', e => e.preventDefault());
     
     img.addEventListener('click', function(e) {
+        console.log("SIDAAAAAAAAAAAAAAA");
         e.preventDefault();
         e.stopPropagation();
         
