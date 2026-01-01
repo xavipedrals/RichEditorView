@@ -446,6 +446,24 @@ RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     img.addEventListener('mousedown', e => e.preventDefault());
     img.addEventListener('touchstart', e => e.preventDefault());
     
+    img.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var currentState = this.getAttribute('data-state');
+        var isPlaying = (currentState === 'playing');
+        var newState = isPlaying ? 'paused' : 'playing';
+        
+        // Update visual state
+        this.setAttribute('data-state', newState);
+        this.src = isPlaying ? playImg : pauseImg;
+        
+        // Send message to native Swift code
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.audioTapped) {
+            window.webkit.messageHandlers.audioTapped.postMessage(audioId);
+        }
+    });
+    
     // 👇 ATOMIC INLINE WRAPPER
     var html =
     '<span class="anki-audio-inline" contenteditable="false">' +
