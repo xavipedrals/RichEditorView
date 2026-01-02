@@ -168,16 +168,6 @@ img {
     padding: 12px 0;
 }
 
-/*.anki-audio-img {*/
-/*    width: 96px;*/
-/*    height: auto;*/
-/*    cursor: pointer;*/
-/*    user-select: none;*/
-/*    -webkit-user-drag: none;*/
-/**/
-/*    transition: transform 0.12s ease-out;*/
-/*}*/
-
 .anki-audio-img:active {
     transform: scale(0.92);
 }

@@ -305,139 +305,7 @@ RE.insertImage = function(url, alt) {
 //    RE.callback("input");
 //};
 
-//RE.insertAudioMarker = function (audioId) {
-//    var span = document.createElement('span');
-//    span.className = 'anki-audio';
-//    span.setAttribute('data-audio-id', audioId);
-//    span.setAttribute('data-state', 'paused');
-//    span.setAttribute('contenteditable', 'false');
-//
-//    span.innerHTML = `
-//        <span class="anki-audio-btn">
-//            <span class="icon"></span>
-//        </span>
-//    `;
-//
-//    span.onclick = function (e) {
-//        e.preventDefault();
-//        window.webkit.messageHandlers.audioTapped.postMessage(audioId);
-//    };
-//
-//    RE.insertHTML(span.outerHTML);
-//    setTimeout(() => RE.callback('input'), 0);
-//};
-
-RE.insertAudioMarker = function (audioId) {
-    // Ensure a valid caret exists
-    RE.prepareInsert();
-    console.log("SIDAAAAA");
-    
-    var html =
-    '<div class="play-button" contenteditable="false">' +
-    '<span class="icon play"></span>' +
-    '<span class="icon pause"></span>' +
-    '</div>' +
-    
-    // Caret host so typing can continue
-    '<p><br></p>';
-    
-    RE.insertHTML(html);
-    RE.callback('input');
-};
-
-RE.insertAudioMarker2 = function (audioId, playImg, pauseImg) {
-    RE.prepareInsert();
-    
-    var html =
-    '<div class="anki-audio-wrapper" contenteditable="false">' +
-    '<img ' +
-    'src="' + playImg + '" ' +
-    'class="anki-audio-img" ' +
-    'data-audio-id="' + audioId + '" ' +
-    'data-play-src="' + playImg + '" ' +
-    'data-pause-src="' + pauseImg + '" ' +
-    'data-state="paused" ' +
-    'alt="Play audio"' +
-    '/>' +
-    '</div>' +
-    '<p><br></p>';
-    
-    RE.insertHTML(html);
-    RE.callback('input');
-};
-
-RE.insertAudioMarker3 = function (audioId, playImg, pauseImg) {
-    // Make sure we have a caret
-    RE.prepareInsert();
-    
-    // Wrapper (block-level, non-editable)
-    var wrapper = document.createElement('div');
-    wrapper.className = 'anki-audio-wrapper';
-    wrapper.setAttribute('contenteditable', 'false');
-    
-    // Image
-    var img = document.createElement('img');
-    img.className = 'anki-audio-img';
-    img.setAttribute('src', playImg);
-    img.setAttribute('alt', 'Play audio');
-    
-    img.setAttribute('data-audio-id', audioId);
-    img.setAttribute('data-play-src', playImg);
-    img.setAttribute('data-pause-src', pauseImg);
-    img.setAttribute('data-state', 'paused');
-    
-    // Height updates (same as insertImage)
-    img.onload = RE.updateHeight;
-    
-    // Assemble
-    wrapper.appendChild(img);
-    
-    // Insert into editor
-    RE.insertHTML(wrapper.outerHTML);
-    
-    // Add a caret host so typing continues normally
-    RE.insertHTML('<p><br></p>');
-    
-    RE.callback('input');
-};
-
-//RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
-//    RE.prepareInsert();
-//    
-//    var img = document.createElement('img');
-//    img.src = playImg;
-//    img.className = 'anki-audio-img';
-//    img.setAttribute('data-audio-id', audioId);
-//    img.setAttribute('data-play-src', playImg);
-//    img.setAttribute('data-pause-src', pauseImg);
-//    img.setAttribute('data-state', 'paused');
-//    img.setAttribute('alt', 'Play audio');
-//    
-//    // Prevent text interaction
-//    img.setAttribute('draggable', 'false');
-//    img.style.userSelect = 'none';
-//    img.style.webkitUserSelect = 'none';
-//    
-//    img.addEventListener('mousedown', e => e.preventDefault());
-//    img.addEventListener('touchstart', e => e.preventDefault());
-//    
-//    // 👇 ATOMIC INLINE WRAPPER
-//    var html =
-//    '<span class="anki-audio-inline" contenteditable="false">' +
-//    img.outerHTML +
-//    '</span>' +
-//    '<p><br></p>'; // caret host
-//    
-//    RE.insertHTML(html);
-//    
-//    setTimeout(function () {
-//            RE.lockAudioMarkers();
-//        }, 0);
-//    
-//    RE.callback('input');
-//};
-
-RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
+RE.insertAudioMarker = function (audioId, playImg, pauseImg) {
     RE.prepareInsert();
     
     var img = document.createElement('img');
@@ -458,7 +326,6 @@ RE.insertAudioMarker4 = function (audioId, playImg, pauseImg) {
     img.addEventListener('touchstart', e => e.preventDefault());
     
     img.addEventListener('click', function(e) {
-        console.log("SIDAAAAAAAAAAAAAAA");
         e.preventDefault();
         e.stopPropagation();
         
@@ -513,9 +380,7 @@ RE.lockAudioMarkers = function () {
 };
 
 RE.setAudioState = function (audioId, isPlaying) {
-    var img = document.querySelector(
-                                     '.anki-audio-img[data-audio-id="' + audioId + '"]'
-                                     );
+    var img = document.querySelect'.anki-audio-img[data-audio-id="' + audioId + '"]');
     if (!img) return;
     
     img.setAttribute('data-state', isPlaying ? 'playing' : 'paused');

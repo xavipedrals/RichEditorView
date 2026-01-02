@@ -467,31 +467,11 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.insertImage('\(url.escaped)', '\(alt.escaped)')")
     }
     
-    public func insertAudio(_ audioId: String) {
-        runJS("RE.prepareInsert()")
-        runJS("RE.insertAudioMarker('\(audioId)')")
-    }
-    
-    public func insertAudio2(audioId: String, playImage: String, pauseImage: String) {
-        runJS("RE.prepareInsert()")
-        runJS("RE.insertAudioMarker2('\(audioId)', '\(playImage)', '\(pauseImage)')")
-    }
-    
-    public func insertAudio3(audioId: String, playImage: String, pauseImage: String) {
-//        runJS("RE.prepareInsert()")
-//        runJS("RE.insertAudioMarker3('\(audioId)', '\(playImage)', '\(pauseImage)')")
-        let js = """
-            (function(){
-                if (!window.RE || typeof RE.insertAudioMarker3 !== 'function') {
-                    console.error('RE.insertAudioMarker3 is missing');
-                    return;
-                }
-                RE.focus();
-                RE.prepareInsert();
-                RE.insertAudioMarker3('\(audioId.escaped)', '\(playImage.escaped)', '\(pauseImage.escaped)');
-            })();
-            """
-        runJS(js)
+    public func insertAudioMarker(audioId: String, playImage: String, pauseImage: String) {
+        runJS("""
+            RE.prepareInsert();
+            RE.insertAudioMarker('\(audioId.escaped)', '\(playImage.escaped)', '\(pauseImage.escaped)');
+        """)
     }
     
     /// Updates the visual state of an audio marker (play / pause)
