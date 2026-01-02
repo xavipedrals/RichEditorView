@@ -380,7 +380,7 @@ RE.lockAudioMarkers = function () {
 };
 
 RE.setAudioState = function (audioId, isPlaying) {
-    var img = document.querySelect'.anki-audio-img[data-audio-id="' + audioId + '"]');
+    var img = document.querySelector('.anki-audio-img[data-audio-id="' + audioId + '"]');
     if (!img) return;
     
     img.setAttribute('data-state', isPlaying ? 'playing' : 'paused');
